@@ -1,0 +1,94 @@
+@startuml
+
+namespace App.Main {
+    class Ubicacion {
+        - direccion: string
+        - latitud: float
+        - longitud: float
+
+        + __construct(direccion: string, latitud: float, longitud: float)
+        + getDireccion(): string
+        + getLatitud(): float
+        + getLongitud(): float
+    }
+
+    class Paquete {
+        - peso: float
+        - alto: float
+        - ancho: float
+        - largo: float
+
+        + __construct(peso: float, alto: float, ancho: float, largo: float)
+        + getPeso(): float
+        + getAlto(): float
+        + getAncho(): float
+        + getLargo(): float
+    }
+
+    interface CostoViaje {
+        + calcularCosto(viaje: Viaje): float
+    }
+
+    class CostoViajeDevolucion {
+        + calcularCosto(viaje: Viaje): float
+    }
+
+    class CostoViajeNormal {
+        + calcularCosto(viaje: Viaje): float
+    }
+
+    class CostoViajePrioritario {
+        + calcularCosto(viaje: Viaje): float
+    }
+
+    class Viaje {
+        - origen: Ubicacion
+        - destino: Ubicacion
+        - paquetes: array
+        - calculadorCosto: CostoViaje
+
+        + __construct(origen: Ubicacion, destino: Ubicacion, paquetes: array, calculadorCosto: CostoViaje)
+        + getOrigen(): Ubicacion
+        + getDestino(): Ubicacion
+        + getPaquetes(): array
+        + agregarPaquete(paquete: any): void
+        + calcularCosto(): float
+        + calcularDistancia(origen: Ubicacion, destino: Ubicacion): float
+        + calcularPesoTotal(): float
+        + calcularVolumenTotal(): float
+        + getCosto(): float
+    }
+
+    class HojaDeRuta {
+        - viajes: array
+        - otrasHojasDeRuta: array
+
+        + __construct(viajes: array, otrasHojasDeRuta: array)
+        + calcularPesoTotal(): float
+        + calcularVolumenTotal(): float
+        + calcularCosto(): float
+    }
+
+    class Camion {
+        - modelo: string
+        - patente: string
+        - volumenMaximo: float
+        - pesoMaximo: float
+        - hojaDeRuta: HojaDeRuta
+
+        + __construct(modelo: string, patente: string, volumenMaximo: float, pesoMaximo: float)
+        + asignarHojaDeRuta(hojaDeRuta: HojaDeRuta): void
+        - puedeCargar(hojaDeRuta: HojaDeRuta): bool
+    }
+}
+
+App.Main.Ubicacion --> App.Main.Viaje
+App.Main.Paquete --> App.Main.Viaje
+App.Main.CostoViajeNormal ..|> App.Main.CostoViaje
+App.Main.CostoViajeDevolucion ..|> App.Main.CostoViaje
+App.Main.CostoViajePrioritario ..|> App.Main.CostoViaje
+App.Main.CostoViaje --> App.Main.Viaje
+App.Main.HojaDeRuta --> App.Main.Viaje
+App.Main.Camion --> App.Main.HojaDeRuta
+
+@enduml
